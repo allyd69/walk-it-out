@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WALK IT OUT - Your Faith Journey</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-deep: #0d0d0f;
+            --bg-card: #161619;
+            --bg-elevated: #1e1e22;
+            --bg-hover: #252529;
+            --gold-primary: #d4a853;
+            --gold-light: #e8c47a;
+            --gold-dim: #8b7235;
+            --text-primary: #f5f5f5;
+            --text-secondary: #a0a0a5;
+            --text-muted: #6b6b70;
+            --accent-red: #c45c5c;
+            --accent-green: #5c9a6b;
+            --accent-blue: #5c7ec4;
+            --accent-purple: #9a5cc4;
+            --accent-orange: #c48c5c;
+            --border-subtle: rgba(212, 168, 83, 0.15);
+            --border-gold: rgba(212, 168, 83, 0.4);
+            --shadow-glow: 0 0 40px rgba(212, 168, 83, 0.1);
+        }
+
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border-subtle);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+        }
+
+        .logo-section {
+            padding: 32px 24px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--gold-primary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .logo-subtitle {
+            font-size: 11px;
+            color: var(--text-muted);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        .nav-section {
+            padding: 24px 16px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .nav-label {
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            padding: 0 12px;
+            margin-bottom: 12px;
+            margin-top: 24px;
+        }
+
+        .nav-label:first-child {
+            margin-top: 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, rgba(212, 168, 83, 0.15), rgba(212, 168, 83, 0.05));
+            color: var(--gold-primary);
+            border: 1px solid var(--border-gold);
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            opacity: 0.8;
+        }
+
+        .streak-card {
+            margin: 16px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(212, 168, 83, 0.1), rgba(212, 168, 83, 0.02));
+            border: 1px solid var(--border-gold);
+            border-radius: 12px;
+        }
+
+        .streak-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--gold-primary);
+            line-height: 1;
+        }
+
+        .streak-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            min-height: 100vh;
+        }
+
+        .header {
+            padding: 24px 40px;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-card);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .header-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 24px;
+            font-weight: 500;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-dim));
+            color: var(--bg-deep);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(212, 168, 83, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--border-gold);
+        }
+
+        .content-area {
+            padding: 40px;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: var(--border-gold);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            font-size: 24px;
+        }
+
+        .stat-icon.gold { background: rgba(212, 168, 83, 0.15); }
+        .stat-icon.green { background: rgba(92, 154, 107, 0.15); }
+        .stat-icon.blue { background: rgba(92, 126, 196, 0.15); }
+
+        .stat-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Journey Entry Card */
+        .entry-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .entry-card:hover {
+            border-color: var(--border-gold);
+        }
+
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .entry-date {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .entry-tags {
+            display: flex;
+            flex-wrap: wrap; /* Added for responsiveness */
+            gap: 8px;
+        }
+
+        .tag {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: nowrap; /* Keep tags on one line */
+        }
+
+        .tag-victory { background: rgba(92, 154, 107, 0.2); color: var(--accent-green); }
+        .tag-struggle { background: rgba(196, 92, 92, 0.2); color: var(--accent-red); }
+        .tag-insight { background: rgba(212, 168, 83, 0.2); color: var(--gold-primary); }
+        .tag-prayer { background: rgba(92, 126, 196, 0.2); color: var(--accent-blue); }
+        .tag-scripture { background: rgba(212, 168, 83, 0.1); color: var(--gold-light); }
+        .tag-family { background: rgba(154, 92, 196, 0.2); color: var(--accent-purple); }
+        .tag-temptation { background: rgba(196, 140, 92, 0.2); color: var(--accent-orange); }
+
+        .entry-type-icon {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .entry-content {
+            color: var(--text-primary);
+            font-size: 16px;
+            line-height: 1.7;
+        }
+
+        .entry-verse {
+            margin-top: 16px;
+            padding: 16px;
+            background: rgba(212, 168, 83, 0.05);
+            border-left: 3px solid var(--gold-primary);
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .entry-verse-ref {
+            font-style: normal;
+            font-weight: 600;
+            color: var(--gold-primary);
+            margin-top: 8px;
+            display: block;
+        }
+
+        /* New Entry Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border-gold);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header {
+            padding: 24px 32px;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 24px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 24px;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 32px;
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 16px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--gold-primary);
+        }
+
+        .input-field::placeholder {
+            color: var(--text-muted);
+        }
+
+        textarea.input-field {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .capture-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .capture-btn {
+            flex: 1;
+            padding: 20px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+        }
+
+        .capture-btn:hover {
+            border-color: var(--gold-primary);
+            color: var(--gold-primary);
+        }
+
+        .capture-btn.recording {
+            border-color: var(--accent-red);
+            background: rgba(196, 92, 92, 0.1);
+            color: var(--accent-red);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .capture-icon {
+            font-size: 28px;
+        }
+
+        .capture-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tag-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tag-option {
+            padding: 10px 18px;
+            border-radius: 20px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+            color: var(--text-secondary);
+        }
+
+        .tag-option:hover {
+            border-color: var(--gold-dim);
+        }
+
+        .tag-option.selected {
+            background: rgba(212, 168, 83, 0.15);
+            border-color: var(--gold-primary);
+            color: var(--gold-primary);
+        }
+
+        /* Helpful Verses Section */
+        .verses-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .verse-category {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .verse-category:hover {
+            border-color: var(--border-gold);
+        }
+
+        .category-header {
+            padding: 20px 24px;
+            background: linear-gradient(135deg, rgba(212, 168, 83, 0.1), rgba(212, 168, 83, 0.02));
+            border-bottom: 1px solid var(--border-subtle);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .category-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gold-primary);
+        }
+
+        .category-content {
+            padding: 20px 24px;
+        }
+
+        .verse-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-subtle);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .verse-item:last-child {
+            border-bottom: none;
+        }
+
+        .verse-item:hover {
+            color: var(--gold-primary);
+        }
+
+        .verse-topic {
+            color: var(--text-primary);
+            font-size: 15px;
+        }
+
+        .verse-ref {
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        /* Bible Study Section */
+        .study-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .study-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 28px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .study-card:hover {
+            border-color: var(--gold-primary);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .study-card-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: rgba(212, 168, 83, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .study-card-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .study-card-desc {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Family Section */
+        .family-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .family-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .family-card:hover {
+            border-color: var(--border-gold);
+        }
+
+        .family-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold-dim), var(--gold-primary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--bg-deep);
+            margin: 0 auto 16px;
+        }
+
+        .family-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .family-relation {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .family-stats {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .family-stat {
+            text-align: center;
+        }
+
+        .family-stat-value {
+            font-weight: 600;
+            color: var(--gold-primary);
+        }
+
+        .family-stat-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--gold-primary), var(--gold-dim), transparent);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 32px;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -34px;
+            top: 4px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--gold-primary);
+            border: 3px solid var(--bg-deep);
+        }
+
+        .timeline-date {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .timeline-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .timeline-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .timeline-text {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Progress Section */
+        .progress-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 20px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .progress-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px;
+        }
+
+        .progress-value {
+            font-size: 14px;
+            color: var(--gold-primary);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-elevated);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold-dim), var(--gold-primary));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .dashboard-grid { grid-template-columns: repeat(2, 1fr); }
+            .family-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 900px) {
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .verses-grid { grid-template-columns: 1fr; }
+            .study-cards { grid-template-columns: 1fr; }
+            .family-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .fade-in-delay-1 { animation-delay: 0.1s; opacity: 0; }
+        .fade-in-delay-2 { animation-delay: 0.2s; opacity: 0; }
+        .fade-in-delay-3 { animation-delay: 0.3s; opacity: 0; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // Icons as simple components
+        const Icons = {
+            Home: () => <span>🏠</span>,
+            Journal: () => <span>📖</span>,
+            Bible: () => <span>✝️</span>,
+            Study: () => <span>📚</span>,
+            Family: () => <span>👨‍👩‍👧‍👦</span>,
+            Timeline: () => <span>📅</span>,
+            Progress: () => <span>📊</span>,
+            Settings: () => <span>⚙️</span>,
+            Mic: () => <span>🎤</span>,
+            Video: () => <span>🎥</span>,
+            Text: () => <span>✏️</span>,
+            Camera: () => <span>📷</span>,
+            Plus: () => <span>+</span>,
+            Close: () => <span>×</span>,
+            Arrow: () => <span>→</span>,
+            Fire: () => <span>🔥</span>,
+            Pray: () => <span>🙏</span>,
+            Heart: () => <span>❤️</span>,
+            Star: () => <span>⭐</span>,
+            Check: () => <span>✓</span>
+        };
+
+        // Sample data
+        const sampleEntries = [
+            {
+                id: 1,
+                date: 'November 28, 2025',
+                type: 'voice',
+                tags: ['victory', 'prayer'],
+                content: "Day 3. I didn't think I could do this but I woke up this morning and the first thing I did was pray. Not reach for my phone, not think about using. Pray. Something is different. Jesus, thank you for being with me in the darkness.",
+                verse: "The Lord is close to the brokenhearted and saves those who are crushed in spirit.",
+                verseRef: "Psalm 34:18"
+            },
+            {
+                id: 2,
+                date: 'November 27, 2025',
+                type: 'text',
+                tags: ['struggle', 'insight', 'temptation'],
+                content: "The Gap is real. I KNOW what I should do. I can see it so clearly. But doing it? That's where the battle is. Today I almost gave in. Almost called Hunter. Almost convinced myself one more time wouldn't hurt. But I didn't. I sat with the discomfort. I read Matthew 7:13-14 about the narrow gate.",
+                verse: "Enter through the narrow gate. For wide is the gate and broad is the road that leads to destruction, and many enter through it.",
+                verseRef: "Matthew 7:13"
+            },
+            {
+                id: 3,
+                date: 'November 26, 2025',
+                type: 'video',
+                tags: ['scripture', 'insight', 'family'],
+                content: "First day of reading the Bible cover to cover. Started Genesis. It hit different reading it as someone who actually believes now. 'In the beginning God created...' - HE CREATED. Everything. Me included. Even the broken parts. Especially the broken parts.",
+                verse: null,
+                verseRef: null
+            }
+        ];
+
+        const helpfulVerses = {
+            "When You Are Feeling": [
+                { topic: "Angry", refs: "Ephesians 4:26-32, James 1:19-20" },
+                { topic: "Afraid", refs: "Isaiah 41:10, Psalm 23" },
+                { topic: "Worried", refs: "Matthew 6:25-34, Philippians 4:6-7" },
+                { topic: "Tired", refs: "Matthew 11:28-30, Isaiah 40:29-31" },
+                { topic: "Lonely", refs: "Psalm 139, Hebrews 13:5" },
+                { topic: "Tempted", refs: "1 Corinthians 10:13, James 4:7" }
+            ],
+            "In Difficult Circumstances": [
+                { topic: "Grief & Loss", refs: "Psalm 34:18, 2 Corinthians 1:3-4" },
+                { topic: "Addiction Recovery", refs: "Romans 6:6-14, 2 Corinthians 5:17" },
+                { topic: "Family Conflict", refs: "Colossians 3:12-14, Romans 12:18" },
+                { topic: "Starting Over", refs: "Isaiah 43:18-19, Lamentations 3:22-23" },
+                { topic: "Feeling Lost", refs: "Jeremiah 29:11, Proverbs 3:5-6" }
+            ],
+            "Living As God Planned": [
+                { topic: "Love", refs: "1 Corinthians 13:4-7, 1 John 4:7-8" },
+                { topic: "Faith", refs: "Hebrews 11:1, Romans 10:17" },
+                { topic: "Forgiveness", refs: "Ephesians 4:32, Matthew 6:14-15" },
+                { topic: "Walking the Narrow Path", refs: "Matthew 7:13-14, Luke 9:23" },
+                { topic: "Spiritual Warfare", refs: "Ephesians 6:10-18, 1 Peter 5:8-9" }
+            ],
+            "Questions About": [
+                { topic: "Who God Is", refs: "Exodus 3:14, John 14:6-9" },
+                { topic: "Who Jesus Is", refs: "John 1:1-14, Colossians 1:15-20" },
+                { topic: "The Holy Spirit", refs: "John 14:15-17, Acts 1:8" },
+                { topic: "Salvation & Grace", refs: "Ephesians 2:8-9, Romans 10:9-10" },
+                { topic: "Hell & Judgment", refs: "Matthew 25:41-46, Revelation 20:11-15" },
+                { topic: "End Times", refs: "Matthew 24, Revelation 21-22" }
+            ]
+        };
+
+        const familyMembers = [
+            { name: "Dad", relation: "Father", initial: "D", conversations: 5, prayers: 12 },
+            { name: "Mum", relation: "Mother", initial: "M", conversations: 3, prayers: 15 },
+            { name: "Older Brother", relation: "Brother", initial: "B", conversations: 2, prayers: 8 },
+            { name: "Middle Sister", relation: "Sister", initial: "S", conversations: 4, prayers: 6 },
+            { name: "Older Sister", relation: "Sister", initial: "S", conversations: 6, prayers: 9 },
+            { name: "Charlie", relation: "Brother", initial: "C", conversations: 1, prayers: 4 }
+        ];
+
+        // Main App Component
+        function App() {
+            const [currentPage, setCurrentPage] = useState('dashboard');
+            const [showModal, setShowModal] = useState(false);
+            const [entries, setEntries] = useState(sampleEntries);
+            const [isRecording, setIsRecording] = useState(false);
+            const [recordingType, setRecordingType] = useState(null);
+            const [newEntry, setNewEntry] = useState({ content: '', tags: [], verse: '', verseRef: '' });
+            const [daysClean, setDaysClean] = useState(3); // Start with 3 as per sample data
+
+            const navItems = [
+                { id: 'dashboard', label: 'Dashboard', icon: <Icons.Home /> },
+                { id: 'journal', label: 'Journey Entries', icon: <Icons.Journal /> },
+                { id: 'verses', label: 'Helpful Verses', icon: <Icons.Bible /> },
+                { id: 'study', label: 'Bible Study Leader', icon: <Icons.Study /> },
+                { id: 'family', label: 'Family', icon: <Icons.Family /> },
+                { id: 'timeline', label: 'Timeline', icon: <Icons.Timeline /> },
+                { id: 'progress', label: 'Progress', icon: <Icons.Progress /> }
+            ];
+
+            const handleRecord = (type) => {
+                if (recordingType === type) {
+                    setIsRecording(false);
+                    setRecordingType(null);
+                } else {
+                    setIsRecording(true);
+                    setRecordingType(type);
+                }
+            };
+
+            const toggleTag = (tag) => {
+                setNewEntry(prev => ({
+                    ...prev,
+                    tags: prev.tags.includes(tag) 
+                        ? prev.tags.filter(t => t !== tag)
+                        : [...prev.tags, tag]
+                }));
+            };
+
+            const saveEntry = () => {
+                if (newEntry.content.trim()) {
+                    const entry = {
+                        id: Date.now(),
+                        date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+                        type: recordingType || 'text',
+                        tags: newEntry.tags,
+                        content: newEntry.content,
+                        verse: newEntry.verse.trim() || null,
+                        verseRef: newEntry.verseRef.trim() || null
+                    };
+                    setEntries([entry, ...entries]);
+                    setNewEntry({ content: '', tags: [], verse: '', verseRef: '' });
+                    setShowModal(false);
+                    setIsRecording(false);
+                    setRecordingType(null);
+                }
+            };
+
+            return (
+                <div className="app-container">
+                    {/* Sidebar */}
+                    <nav className="sidebar">
+                        <div className="logo-section">
+                            <div className="logo">Walk It Out</div>
+                            <div className="logo-subtitle">Your Faith Journey</div>
+                        </div>
+                        
+                        <div className="nav-section">
+                            <div className="nav-label">Navigate</div>
+                            {navItems.map(item => (
+                                <div 
+                                    key={item.id}
+                                    className={`nav-item ${currentPage === item.id ? 'active' : ''}`}
+                                    onClick={() => setCurrentPage(item.id)}
+                                >
+                                    <span className="nav-icon">{item.icon}</span>
+                                    {item.label}
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="streak-card">
+                            <div className="streak-number">{daysClean}</div>
+                            <div className="streak-label">Days Walking Clean</div>
+                        </div>
+                    </nav>
+
+                    {/* Main Content */}
+                    <main className="main-content">
+                        <header className="header">
+                            <h1 className="header-title">
+                                {navItems.find(n => n.id === currentPage)?.label || 'Dashboard'}
+                            </h1>
+                            <div className="header-actions">
+                                <button className="btn btn-primary" onClick={() => setShowModal(true)}>
+                                    <Icons.Plus /> New Entry
+                                </button>
+                            </div>
+                        </header>
+
+                        <div className="content-area">
+                            {currentPage === 'dashboard' && (
+                                <DashboardPage entries={entries} daysClean={daysClean} />
+                            )}
+                            {currentPage === 'journal' && (
+                                <JournalPage entries={entries} />
+                            )}
+                            {currentPage === 'verses' && (
+                                <VersesPage verses={helpfulVerses} />
+                            )}
+                            {currentPage === 'study' && (
+                                <StudyPage />
+                            )}
+                            {currentPage === 'family' && (
+                                <FamilyPage members={familyMembers} />
+                            )}
+                            {currentPage === 'timeline' && (
+                                <TimelinePage entries={entries} />
+                            )}
+                            {currentPage === 'progress' && (
+                                <ProgressPage daysClean={daysClean} />
+                            )}
+                        </div>
+                    </main>
+
+                    {/* New Entry Modal */}
+                    {showModal && (
+                        <div className="modal-overlay" onClick={() => setShowModal(false)}>
+                            <div className="modal" onClick={e => e.stopPropagation()}>
+                                <div className="modal-header">
+                                    <h2 className="modal-title">New Journey Entry</h2>
+                                    <button className="modal-close" onClick={() => setShowModal(false)}>
+                                        <Icons.Close />
+                                    </button>
+                                </div>
+                                <div className="modal-body">
+                                    <div className="input-label">Capture Your Moment</div>
+                                    <div className="capture-buttons">
+                                        <button 
+                                            className={`capture-btn ${recordingType === 'voice' ? 'recording' : ''}`}
+                                            onClick={() => handleRecord('voice')}
+                                        >
+                                            <span className="capture-icon"><Icons.Mic /></span>
+                                            <span className="capture-label">
+                                                {recordingType === 'voice' ? 'Recording...' : 'Voice'}
+                                            </span>
+                                        </button>
+                                        <button 
+                                            className={`capture-btn ${recordingType === 'video' ? 'recording' : ''}`}
+                                            onClick={() => handleRecord('video')}
+                                        >
+                                            <span className="capture-icon"><Icons.Video /></span>
+                                            <span className="capture-label">
+                                                {recordingType === 'video' ? 'Recording...' : 'Video'}
+                                            </span>
+                                        </button>
+                                        <button className="capture-btn">
+                                            <span className="capture-icon"><Icons.Camera /></span>
+                                            <span className="capture-label">Photo</span>
+                                        </button>
+                                    </div>
+
+                                    <div className="input-group">
+                                        <label className="input-label">What's on your heart?</label>
+                                        <textarea 
+                                            className="input-field"
+                                            placeholder="Pour it out... no filter needed here."
+                                            value={newEntry.content}
+                                            onChange={e => setNewEntry({...newEntry, content: e.target.value})}
+                                        />
+                                    </div>
+
+                                    <div className="input-group">
+                                        <label className="input-label">Tag This Moment</label>
+                                        <div className="tag-selector">
+                                            {['victory', 'struggle', 'insight', 'prayer', 'scripture', 'family', 'temptation'].map(tag => (
+                                                <button 
+                                                    key={tag}
+                                                    className={`tag-option ${newEntry.tags.includes(tag) ? 'selected' : ''}`}
+                                                    onClick={() => toggleTag(tag)}
+                                                >
+                                                    {tag}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className="input-group">
+                                        <label className="input-label">Attach a Verse (optional)</label>
+                                        <input 
+                                            type="text" 
+                                            className="input-field"
+                                            placeholder="Verse Text (e.g., 'For wide is the gate...')"
+                                            value={newEntry.verse}
+                                            onChange={e => setNewEntry({...newEntry, verse: e.target.value})}
+                                        />
+                                    </div>
+
+                                    <div className="input-group">
+                                        <label className="input-label">Verse Reference (optional)</label>
+                                        <input 
+                                            type="text" 
+                                            className="input-field"
+                                            placeholder="e.g., Matthew 7:13"
+                                            value={newEntry.verseRef}
+                                            onChange={e => setNewEntry({...newEntry, verseRef: e.target.value})}
+                                        />
+                                    </div>
+
+                                    <button className="btn btn-primary" style={{width: '100%'}} onClick={saveEntry}>
+                                        Save Entry
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // Dashboard Page
+        function DashboardPage({ entries, daysClean }) {
+            return (
+                <>
+                    <div className="dashboard-grid">
+                        <div className="stat-card fade-in">
+                            <div className="stat-icon gold"><Icons.Fire /></div>
+                            <div className="stat-value">{daysClean}</div>
+                            <div className="stat-label">Days Walking Clean</div>
+                        </div>
+                        <div className="stat-card fade-in fade-in-delay-1">
+                            <div className="stat-icon green"><Icons.Journal /></div>
+                            <div className="stat-value">{entries.length}</div>
+                            <div className="stat-label">Journey Entries</div>
+                        </div>
+                        <div className="stat-card fade-in fade-in-delay-2">
+                            <div className="stat-icon blue"><Icons.Pray /></div>
+                            <div className="stat-value">12</div>
+                            <div className="stat-label">Prayers Documented</div>
+                        </div>
+                    </div>
+
+                    <h2 style={{fontFamily: 'Cormorant Garamond, serif', fontSize: '22px', marginBottom: '20px'}}>
+                        Recent Entries
+                    </h2>
+                    
+                    {entries.slice(0, 3).map((entry, i) => (
+                        <EntryCard key={entry.id} entry={entry} delay={i} />
+                    ))}
+                </>
+            );
+        }
+
+        // Journal Page
+        function JournalPage({ entries }) {
+            return (
+                <>
+                    {entries.map((entry, i) => (
+                        <EntryCard key={entry.id} entry={entry} delay={i % 3} />
+                    ))}
+                </>
+            );
+        }
+
+        // Entry Card Component
+        function EntryCard({ entry, delay }) {
+            const typeIcons = {
+                voice: <Icons.Mic />,
+                video: <Icons.Video />,
+                text: <Icons.Text />
+            };
+
+            const tagColorMap = (tag) => {
+                switch(tag) {
+                    case 'victory': return 'tag-victory';
+                    case 'struggle': return 'tag-struggle';
+                    case 'insight': return 'tag-insight';
+                    case 'prayer': return 'tag-prayer';
+                    case 'scripture': return 'tag-scripture';
+                    case 'family': return 'tag-family';
+                    case 'temptation': return 'tag-temptation';
+                    default: return '';
+                }
+            }
+
+            return (
+                <div className={`entry-card fade-in fade-in-delay-${delay + 1}`}>
+                    <div className="entry-header">
+                        <div>
+                            <div className="entry-date">{entry.date}</div>
+                            <div className="entry-type-icon">
+                                {typeIcons[entry.type] || <Icons.Text />} {entry.type} entry
+                            </div>
+                        </div>
+                        <div className="entry-tags">
+                            {entry.tags.map(tag => (
+                                <span key={tag} className={`tag ${tagColorMap(tag)}`}>{tag}</span>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="entry-content">{entry.content}</div>
+                    {entry.verse && (
+                        <div className="entry-verse">
+                            "{entry.verse}"
+                            <span className="entry-verse-ref">— {entry.verseRef}</span>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // Verses Page
+        function VersesPage({ verses }) {
+            const [expandedCategory, setExpandedCategory] = useState(null);
+
+            return (
+                <div className="verses-grid">
+                    {Object.entries(verses).map(([category, items]) => (
+                        <div key={category} className="verse-category">
+                            <div 
+                                className="category-header"
+                                onClick={() => setExpandedCategory(
+                                    expandedCategory === category ? null : category
+                                )}
+                            >
+                                <span className="category-title">{category}</span>
+                                <span style={{color: 'var(--gold-primary)'}}>
+                                    {expandedCategory === category ? '−' : '+'}
+                                </span>
+                            </div>
+                            {expandedCategory === category && (
+                                <div className="category-content">
+                                    {items.map(item => (
+                                        <div key={item.topic} className="verse-item">
+                                            <span className="verse-topic">{item.topic}</span>
+                                            <span className="verse-ref">{item.refs}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            );
+        }
+
+        // Bible Study Page
+        function StudyPage() {
+            const studyTypes = [
+                { icon: '📖', title: 'Deep Dive Study', desc: 'Work through a passage verse by verse using the complete study template.' },
+                { icon: '🎯', title: 'Topical Study', desc: 'Focus on one theme: spiritual warfare, end times, grace vs. works - the stuff churches avoid.' },
+                { icon: '⚡', title: 'Current Events + Scripture', desc: 'What\'s happening NOW and what God\'s Word says about it.' },
+                { icon: '❓', title: 'Hard Questions Session', desc: 'Hell, judgment, Revelation, demonic activity - topics people are afraid to discuss.' },
+                { icon: '🙏', title: 'Prayer & Intercession', desc: 'Focused prayer time with Scripture backing for your family.' },
+                { icon: '📝', title: 'Quick Devotional', desc: '10-15 minute session when full study isn\'t possible.' }
+            ];
+
+            return (
+                <>
+                    <p style={{color: 'var(--text-secondary)', marginBottom: '32px', fontSize: '16px', lineHeight: '1.7'}}>
+                        Lead your family into deeper faith. Plan sessions, record conversations, track spiritual growth. 
+                        Be the change they need to see.
+                    </p>
+                    <div className="study-cards">
+                        {studyTypes.map((study, i) => (
+                            <div key={study.title} className={`study-card fade-in fade-in-delay-${(i % 3) + 1}`}>
+                                <div className="study-card-icon">{study.icon}</div>
+                                <div className="study-card-title">{study.title}</div>
+                                <div className="study-card-desc">{study.desc}</div>
+                            </div>
+                        ))}
+                    </div>
+                </>
+            );
+        }
+
+        // Family Page
+        function FamilyPage({ members }) {
+            return (
+                <>
+                    <p style={{color: 'var(--text-secondary)', marginBottom: '32px', fontSize: '16px', lineHeight: '1.7'}}>
+                        Track conversations, document observations, pray specifically. Your transformation will speak louder than arguments.
+                    </p>
+                    <div className="family-grid">
+                        {members.map(member => (
+                            <div key={member.name} className="family-card">
+                                <div className="family-avatar">{member.initial}</div>
+                                <div className="family-name">{member.name}</div>
+                                <div className="family-relation">{member.relation}</div>
+                                <div className="family-stats">
+                                    <div className="family-stat">
+                                        <div className="family-stat-value">{member.conversations}</div>
+                                        <div className="family-stat-label">Conversations</div>
+                                    </div>
+                                    <div className="family-stat">
+                                        <div className="family-stat-value">{member.prayers}</div>
+                                        <div className="family-stat-label">Prayers</div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </>
+            );
+        }
+
+        // Timeline Page
+        function TimelinePage({ entries }) {
+            const milestones = [
+                { date: 'November 26, 2025', title: 'Day 1 - The Surrender', text: 'Made the decision. Jesus found me. Starting the journey.' },
+                { date: 'November 27, 2025', title: 'Started Reading Genesis', text: 'First time reading the Bible cover to cover. This is different.' },
+                { date: 'November 28, 2025', title: 'Day 3 - First Morning Prayer', text: 'Woke up and prayed first. Not the phone. Not the cravings. Prayer.' }
+            ];
+
+            return (
+                <div className="timeline">
+                    {milestones.map((item, i) => (
+                        <div key={i} className="timeline-item">
+                            <div className="timeline-dot"></div>
+                            <div className="timeline-date">{item.date}</div>
+                            <div className="timeline-content">
+                                <div className="timeline-title">{item.title}</div>
+                                <div className="timeline-text">{item.text}</div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            );
+        }
+
+        // Progress Page
+        function ProgressPage({ daysClean }) {
+            // Calculations for progress bar widths
+            const daysCleanProgress = Math.min((daysClean / 30) * 100, 100);
+            const bibleReadingProgress = (3 / 1189) * 100; // Genesis 3 / 1189 chapters total
+            const prayerStreakProgress = Math.min((3 / 30) * 100, 100); // Out of a monthly goal for visual scale
+
+            return (
+                <>
+                    <div className="progress-card">
+                        <div className="progress-header">
+                            <span className="progress-title">🔥 Sobriety Journey</span>
+                            <span className="progress-value">{daysClean} / 30 days (first milestone)</span>
+                        </div>
+                        <div className="progress-bar">
+                            <div className="progress-fill" style={{width: `${daysCleanProgress}%`}}></div>
+                        </div>
+                    </div>
+
+                    <div className="progress-card">
+                        <div className="progress-header">
+                            <span className="progress-title">📖 Bible Reading</span>
+                            <span className="progress-value">Genesis 3 / 1189 chapters</span>
+                        </div>
+                        <div className="progress-bar">
+                            <div className="progress-fill" style={{width: `${bibleReadingProgress}%`}}></div>
+                        </div>
+                    </div>
+
+                    <div className="progress-card">
+                        <div className="progress-header">
+                            <span className="progress-title">🙏 Daily Prayer Streak</span>
+                            <span className="progress-value">3 days</span>
+                        </div>
+                        <div className="progress-bar">
+                            <div className="progress-fill" style={{width: `${prayerStreakProgress}%`}}></div>
+                        </div>
+                    </div>
+
+                    <div className="progress-card">
+                        <div className="progress-header">
+                            <span className="progress-title">👨‍👩‍👧‍👦 Family Bible Studies Led</span>
+                            <span className="progress-value">0 sessions</span>
+                        </div>
+                        <div className="progress-bar">
+                            <div className="progress-fill" style={{width: '0%'}}></div>
+                        </div>
+                    </div>
+                </>
+            );
+        }
+
+        // Render the app
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
